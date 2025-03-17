@@ -1,0 +1,47 @@
+package templates
+
+import "go-templ/models"
+
+templ TodoItem(todo *models.Todo) {
+	<div class="todo-item" id={ "todo-" + todo.ID }>
+		<input
+			type="checkbox"
+			hx-post={ "/todo/" + todo.ID + "/toggle" }
+			hx-target={ "#todo-" + todo.ID }
+			hx-swap="outerHTML"
+			if todo.Completed {
+				checked
+			}
+		/>
+		<span class={ templ.KV("completed", todo.Completed) }>{ todo.Task }</span>
+		<button
+			class="delete-btn"
+			hx-delete={ "/todo/" + todo.ID }
+			hx-target={ "#todo-" + todo.ID }
+			hx-swap="outerHTML"
+		>
+			Delete
+		</button>
+	</div>
+}
+
+templ TodoList(todos []*models.Todo) {
+	<div id="todo-list">
+		if len(todos) == 0 {
+			<div class="empty-list">No tasks yet, add one below!</div>
+		} else {
+			for _, todo := range todos {
+				@TodoItem(todo)
+			}
+		}
+	</div>
+}
+
+templ TodoForm() {
+	<div class="todo-form">
+		<form hx-post="/todo" hx-target="#todo-list" hx-swap="beforeend" hx-on::after-request="this.reset()">
+			<input type="text" name="task" placeholder="Add a new task..." required/>
+			<button type="submit">Add</button>
+		</form>
+	</div>
+}

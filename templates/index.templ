@@ -1,0 +1,10 @@
+package templates
+
+import "go-templ/models"
+
+templ Index(todos []*models.Todo) {
+	@Base() {
+		@TodoList(todos)
+		@TodoForm()
+	}
+}
