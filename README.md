@@ -1,2 +1,2 @@
 # go-templ
-learning templ with HTMX
+learning go templ with HTMX
